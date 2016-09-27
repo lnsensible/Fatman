@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class PlayerScript : MonoBehaviour {
-    //!食べているかどうか
+
     public bool holdingFood;
     //!食べている時間
     private float eatingTimer;
@@ -22,6 +22,7 @@ public class PlayerScript : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         hunger = FindObjectOfType<HungerManager>();
+    reference = this;
 	}
 	
 	// Update is called once per frame
