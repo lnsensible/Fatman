@@ -9,6 +9,8 @@ public class PlayerScript : MonoBehaviour {
 
     public GameObject foodHeld;
 
+    public static PlayerScript reference;
+
     HungerManager hunger;
 
     //!成長するまで何個食べたか
@@ -22,7 +24,7 @@ public class PlayerScript : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         hunger = FindObjectOfType<HungerManager>();
-    reference = this;
+        reference = this;
 	}
 	
 	// Update is called once per frame
