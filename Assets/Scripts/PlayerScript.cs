@@ -11,8 +11,6 @@ public class PlayerScript : MonoBehaviour {
 
     public static PlayerScript reference;
 
-    HungerManager hunger;
-
     //!成長するまで何個食べたか
     private int ate = 0;
     //!太るまでの上限
@@ -23,7 +21,6 @@ public class PlayerScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        hunger = FindObjectOfType<HungerManager>();
         reference = this;
 	}
 	
@@ -38,7 +35,6 @@ public class PlayerScript : MonoBehaviour {
             if (eatingTimer < 0)
             {
                 ate += 1;
-                hunger.Eat();
                 Destroy(foodHeld);
                 GetComponent<Rigidbody>().mass += 1;
                 SatisfyStomach();
@@ -87,7 +83,6 @@ public class PlayerScript : MonoBehaviour {
             GetComponent<CharacterMovement>().Knocked();
             GetComponent<Rigidbody>().velocity = (dir * 5.0f);
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(dir), 0.5f);
-            hunger.Damaged();
         }
     }
 
