@@ -55,12 +55,18 @@ public class PlayerScript : MonoBehaviour {
     {
         if (col.transform.tag == "Enemy")
         {
-            Debug.Log("enemy");
-            Vector3 dir = col.contacts[0].point - transform.position;
-            dir = -dir.normalized;
-            GetComponent<CharacterMovement>().Knocked();
-            GetComponent<Rigidbody>().velocity = (dir * 5.0f);
-            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(dir), 0.5f);
+            if (CharacterManager.Instance.isFever())
+            {
+                col.gameObject.GetComponent<AStarEnemy>().Killed();
+            }
+            else
+            {
+                Vector3 dir = col.contacts[0].point - transform.position;
+                dir = -dir.normalized;
+                GetComponent<CharacterMovement>().Knocked();
+                GetComponent<Rigidbody>().velocity = (dir * 5.0f);
+                transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(dir), 0.5f);
+            }
         }
     }
 

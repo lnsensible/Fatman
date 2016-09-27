@@ -16,9 +16,16 @@ public class SmoothFollow : MonoBehaviour
 
     public static Vector3 wantedPos;
 
+    ChracterRestrict[] cr;
+
     void OnEnable()
     {
         transitioning = 0.0f;
+    }
+
+    void Start()
+    {
+        cr = FindObjectsOfType<ChracterRestrict>();
     }
 
     void LateUpdate()
@@ -45,7 +52,10 @@ public class SmoothFollow : MonoBehaviour
             this.transform.position = Vector3.Lerp(this.transform.position, wantedPos, transitioning);
             if (transitioning >= 1.0f)
             {
-                character.GetComponent<ChracterRestrict>().startGame();
+                foreach (ChracterRestrict cr2 in cr)
+                {
+                    cr2.startGame();
+                }
             }
         }
         else

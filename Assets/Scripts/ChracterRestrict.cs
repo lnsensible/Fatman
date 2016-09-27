@@ -13,6 +13,8 @@ public class ChracterRestrict : MonoBehaviour {
 
     TitleScreen titlemanager;
 
+    public GameObject enemyPrefab;
+
     bool restrict = false;
 
 	void Start () {
@@ -38,6 +40,11 @@ public class ChracterRestrict : MonoBehaviour {
 
         titlemanager.inTitle = false;
         restrict = true;
+
+        if (tag == "Initial Enemy"){
+            Instantiate(enemyPrefab, transform.position, transform.rotation);
+            Destroy(gameObject);
+        }
     }
 	
 	void Update () {
