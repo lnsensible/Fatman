@@ -21,8 +21,18 @@ public class CharacterManager : MonoBehaviour {
     public Image feverFill;
     public GameObject feverGauge;
 
+    Color GaugeOriginalColor;
+    public Gradient GaugeFeverGradient;
+    public float GaugeFeverColorSpeed;
+
     [SerializeField]
     ParticleSystem[] FeverFX;
+
+    [SerializeField]
+    ParticleSystem GaugeFX;
+
+    [SerializeField]
+    GameObject feverText;
 
     float feverAmount = 0;
     bool inFeverMode = false;
@@ -54,6 +64,8 @@ public class CharacterManager : MonoBehaviour {
 
     void Start()
     {
+        GaugeOriginalColor = feverFill.color;
+
         for (int i = 0; i < FeverFX.Length; ++i)
         {
             FeverFX[i].Stop();
@@ -96,9 +108,12 @@ public class CharacterManager : MonoBehaviour {
 
     public void EatFood(float amt)
     {
-        feverAmount += amt;
-        StopCoroutine("GaugeFill");
-        StartCoroutine("GaugeFill");
+        if (!inFeverMode)
+        {
+            feverAmount += amt;
+            StopCoroutine("GaugeFill");
+            StartCoroutine("GaugeFill");
+        }
     }
 	
 	// Update is called once per frame
@@ -132,6 +147,9 @@ public class CharacterManager : MonoBehaviour {
         }
         StartCoroutine("Deplete");
         StartCoroutine("Pulse");
+        GaugeFX.Play();
+        StartCoroutine("RainbowGauge");
+        feverText.SetActive(true);
     }
 
     public void UNFEVER()
@@ -142,6 +160,18 @@ public class CharacterManager : MonoBehaviour {
         for (int i = 0; i < FeverFX.Length; ++i)
         {
             FeverFX[i].Stop();
+        }
+        GaugeFX.Stop();
+        feverFill.color = GaugeOriginalColor;
+        feverText.SetActive(false);
+    }
+    IEnumerator RainbowGauge()
+    {
+        while (true)
+        {
+            yield return null;
+            float t = Mathf.Repeat(Time.time, GaugeFeverColorSpeed) / GaugeFeverColorSpeed;
+            feverFill.color = GaugeFeverGradient.Evaluate(t);
         }
     }
 

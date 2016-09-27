@@ -6,7 +6,7 @@ public class NormalEnemy : MonoBehaviour {
     GameObject characterReference;
     public float speed;
 
-    Rigidbody rigidbody;
+    Rigidbody myrigidbody;
 
     public float idleMin;
     public float idleMax;
@@ -35,7 +35,7 @@ public class NormalEnemy : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         characterReference = GameObject.FindGameObjectWithTag("Player");
-        rigidbody = GetComponent<Rigidbody>();
+        myrigidbody = GetComponent<Rigidbody>();
         ParticleSystem[] ps = GetComponentsInChildren<ParticleSystem>();
         particleSystemIdle = ps[0];
         particleSystemChase = ps[1];
@@ -53,7 +53,7 @@ public class NormalEnemy : MonoBehaviour {
         {
             movement = (characterReference.transform.position - transform.position).normalized;
 
-            rigidbody.velocity = (movement * speed);
+            myrigidbody.velocity = (movement * speed);
         }
         else if (state == State.Wander)
         {
@@ -77,13 +77,13 @@ public class NormalEnemy : MonoBehaviour {
                     wanderTimer -= Time.deltaTime;
                     if (wanderTimer > 0)
                     {
-                        rigidbody.velocity = idleDirection * idleSpeed;
+                        myrigidbody.velocity = idleDirection * idleSpeed;
                         movement = idleDirection;
                     }
                     else
                     {
                         wanderTimer = Random.Range(idleMin, idleMax);
-                        rigidbody.velocity = Vector3.zero;
+                        myrigidbody.velocity = Vector3.zero;
                         isMoving = false;
                         
                     }
@@ -122,8 +122,8 @@ public class NormalEnemy : MonoBehaviour {
             particleSystemChase.Clear();
             state = State.Wander;
 
-            rigidbody.velocity = (transform.position - col.contacts[0].point).normalized * 0.3f;
-            transform.rotation = Quaternion.LookRotation(rigidbody.velocity);
+            myrigidbody.velocity = (transform.position - col.contacts[0].point).normalized * 0.3f;
+            transform.rotation = Quaternion.LookRotation(myrigidbody.velocity);
         }
     }
 }

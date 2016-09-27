@@ -20,6 +20,9 @@ public class TitleScreen : MonoBehaviour {
 
     public float roadScaleSpeed;
 
+    public CanvasGroup[] UIFadeIn;
+    public float FadeinSpeed;
+
 	// Use this for initialization
 	void Start () {
         maincam = Camera.main;
@@ -45,12 +48,11 @@ public class TitleScreen : MonoBehaviour {
         var roads = GameObject.FindGameObjectsWithTag("FakeRoad").AsEnumerable();
         roads = roads.OrderBy(road => road.transform.position.x);
 
-        Vector3 scalevector = new Vector3(roadScaleSpeed, 0, roadScaleSpeed);
         List<GameObject> sortedRoads = roads.ToList<GameObject>();
         while (sortedRoads.Count > 0)
         {
             yield return null;
-            sortedRoads[0].transform.localScale -= scalevector;
+            sortedRoads[0].transform.localScale = Vector3.MoveTowards(sortedRoads[0].transform.localScale, Vector3.zero, roadScaleSpeed * Time.deltaTime);
 
             if (sortedRoads[0].transform.localScale.x <= 0.0f)
             {
@@ -59,7 +61,7 @@ public class TitleScreen : MonoBehaviour {
             }
             if (sortedRoads.Count > 0 && sortedRoads[0].transform.localScale.x < 0.5f && sortedRoads.Count > 1)
             {
-                sortedRoads[1].transform.localScale -= scalevector;
+                sortedRoads[1].transform.localScale = Vector3.MoveTowards(sortedRoads[1].transform.localScale, Vector3.zero, roadScaleSpeed * Time.deltaTime);
             }
         }
     }
@@ -68,5 +70,19 @@ public class TitleScreen : MonoBehaviour {
     {
         startbutton.gameObject.SetActive(false);
         maincam.GetComponent<SmoothFollow>().enabled = true;
+        StartCoroutine("FadeUI");
     }
+
+    IEnumerator FadeUI()
+    {
+        while (UIFadeIn[0].alpha != 1)
+        {
+            yield return null;
+            for (int i = 0; i < UIFadeIn.Length; ++i)
+            {
+                UIFadeIn[i].alpha += FadeinSpeed * Time.deltaTime;
+            }
+        }
+    }
+
 }

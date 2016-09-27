@@ -3,11 +3,8 @@ using System.Collections;
 
 public class PlayerScript : MonoBehaviour {
 
-    public bool holdingFood;
     //!食べている時間
     private float eatingTimer;
-
-    public GameObject foodHeld;
 
     public static PlayerScript reference;
 
@@ -18,59 +15,40 @@ public class PlayerScript : MonoBehaviour {
     //!デブレベル
     public int fatLevel = 1;
 
+    public float GrowSpeed = 0.5f;
+    public float GrowTimer = 1.0f;
 
 	// Use this for initialization
 	void Start () {
         reference = this;
 	}
-	
-	// Update is called once per frame
-	void Update () {
-        PlayerAttack();
-        //!食べているとき
-        if (holdingFood)
+
+    public void Eat(int foodpoint)
+    {
+        ate += 1;
+        GetComponent<Rigidbody>().mass += 1;
+        SatisfyStomach();
+        CharacterManager.Instance.EatFood(foodpoint);
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            eatingTimer -= Time.deltaTime;
-            //!食べ終わったら
-            if (eatingTimer < 0)
-            {
-                ate += 1;
-                Destroy(foodHeld);
-                GetComponent<Rigidbody>().mass += 1;
-                SatisfyStomach();
-                //StopCoroutine("Grow");
-                //StartCoroutine("Grow");
-                holdingFood = false;
-            }
+            StartCoroutine("Grow");
         }
-	}
+    }
 
     IEnumerator Grow()
     {
-        float growthleft = 1.0f;
-        float growthspeed = 0.5f / growthleft;
+        float growthleft = GrowTimer;
+        float growthspeed = GrowSpeed / growthleft;
         while (growthleft > 0.0f)
         {
             yield return null;
             transform.localScale += new Vector3(growthspeed * Time.deltaTime, growthspeed * Time.deltaTime, growthspeed * Time.deltaTime);
             growthleft -= Time.deltaTime;
         }
-    }
-
-    public void HoldFood(GameObject food)
-    {
-        foodHeld = food;
-        eatingTimer = 1.5f;
-        holdingFood = true;
-    }
-
-    public void DroppedFood()
-    {
-        Debug.Log("dropped food");
-        if (foodHeld)
-            Destroy(foodHeld);
-
-        holdingFood = false;
     }
 
     void OnCollisionEnter(Collision col)
@@ -84,14 +62,6 @@ public class PlayerScript : MonoBehaviour {
             GetComponent<Rigidbody>().velocity = (dir * 5.0f);
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(dir), 0.5f);
         }
-    }
-
-    void PlayerAttack()
-    {
-            if(Input.GetButtonDown("Jump"))
-            {
-                this.transform.Rotate(20.0f,0.0f,0.0f);
-            }
     }
 
     ///
