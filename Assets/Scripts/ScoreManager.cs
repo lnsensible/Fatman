@@ -25,7 +25,11 @@ public class ScoreManager : MonoBehaviour {
     public float originalScaleAmt;
 
     public GameObject comboTextPrefab;
+
     public float comboTextHeightOffset;
+    public float comboTextOffsetMultiplier;
+    public float maxComboTextScreenHeight;
+
     public float combobasedSizeIncrease;
     public float maxTextSizeIncrease;
 
@@ -33,11 +37,16 @@ public class ScoreManager : MonoBehaviour {
 
     public Canvas parentCanvas;
 
+    Transform player;
+
     public int baseEnemyScore;
     public float comboMultiplier;
     public int maxComboScore;
 
+    public float camFOV;
+
     int comboCount = 0;
+    
 
     private static ScoreManager instance = null;
 
@@ -61,12 +70,13 @@ public class ScoreManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        player = GameObject.FindGameObjectWithTag("Player").transform;
         originalHeight = scoreText[0].transform.localPosition.y;
         jumpHeight += originalHeight;
 
         theActualScore = 0;
 
-        StartCoroutine("ScoreJump");
+        //StartCoroutine("ScoreJump");
 	}
 
     public void Fever()
@@ -88,12 +98,13 @@ public class ScoreManager : MonoBehaviour {
 
     public void AddCombo(Transform t){
         ++comboCount;
+        Camera.main.fieldOfView = camFOV;
         GameObject clone = Instantiate(comboTextPrefab);
 
-        Vector3 worldPos = new Vector3(t.position.x, t.position.y, t.position.z + comboTextHeightOffset);
+        Vector3 worldPos = new Vector3(t.position.x, t.position.y, t.position.z + (comboTextHeightOffset + (comboCount * comboTextOffsetMultiplier)));
         Vector3 screenPos = Camera.main.WorldToScreenPoint(worldPos);
         clone.transform.SetParent(parentCanvas.transform, false);
-        clone.transform.position = new Vector3(screenPos.x, screenPos.y, screenPos.z);
+        clone.transform.position = new Vector3(screenPos.x, Mathf.Min(screenPos.y, maxComboTextScreenHeight), screenPos.z);
 
         int size = (int)(Mathf.Min(maxTextSizeIncrease, comboCount * combobasedSizeIncrease));
         clone.GetComponent<Text>().fontSize += size;
@@ -155,7 +166,6 @@ public class ScoreManager : MonoBehaviour {
                     }
                         
                     scoreText[i].text = reversed[i].ToString();
-                    Debug.Log("Score: " + theActualScore);
                 }
             }
             else if (process == 1)

@@ -128,7 +128,6 @@ public class CharacterManager : MonoBehaviour {
             feverTimer -= Time.deltaTime;
             if (feverTimer < 0)
             {
-                Debug.Log("unfever");
                 UNFEVER();
             }
         }
@@ -183,6 +182,7 @@ public class CharacterManager : MonoBehaviour {
         {
             while (true)
             {
+                yield return null;
                 while (Camera.main.fieldOfView < FeverFOV)
                 {
                     yield return null;

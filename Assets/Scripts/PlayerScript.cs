@@ -49,6 +49,10 @@ public class PlayerScript : MonoBehaviour {
         {
             if (CharacterManager.Instance.isFever())
             {
+                if (ScoreManager.Instance)
+                {
+                    ScoreManager.Instance.AddCombo(col.transform);
+                }
                 col.gameObject.GetComponent<AStarEnemy>().Killed();
             }
             else
