@@ -151,6 +151,7 @@ public class CharacterManager : MonoBehaviour {
         StartCoroutine("RainbowGauge");
         feverText.SetActive(true);
         HordeManager.Instance.Fever();
+        ScoreManager.Instance.Fever();
     }
 
     public void UNFEVER()
@@ -180,10 +181,13 @@ public class CharacterManager : MonoBehaviour {
     {
         if (t)
         {
-            while (Camera.main.fieldOfView < FeverFOV)
+            while (true)
             {
-                yield return null;
-                Camera.main.fieldOfView += Time.deltaTime * FOVSpeed;
+                while (Camera.main.fieldOfView < FeverFOV)
+                {
+                    yield return null;
+                    Camera.main.fieldOfView += Time.deltaTime * FOVSpeed;
+                }
             }
         }
         else
