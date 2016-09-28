@@ -5,9 +5,11 @@ public class CharacterMovement : MonoBehaviour {
 
     public float speed;
     public bool knockback;
+
+    TitleScreen titlemanager;
 	// Use this for initialization
 	void Start () {
-	
+        titlemanager = FindObjectOfType<TitleScreen>();
 	}
 
     public void Knocked()
@@ -23,7 +25,7 @@ public class CharacterMovement : MonoBehaviour {
     }
 	// Update is called once per frame
 	void Update () {
-        if (!knockback)
+        if (!knockback && !titlemanager.inTitle)
         {
             float moveHorizontal = Input.GetAxis("Horizontal");
             float moveVertical = Input.GetAxis("Vertical");

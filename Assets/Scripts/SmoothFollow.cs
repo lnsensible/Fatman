@@ -11,6 +11,23 @@ public class SmoothFollow : MonoBehaviour
     public float damp;
     public float dist;
 
+    float transitioning;
+    public float transitionSpeed;
+
+    public static Vector3 wantedPos;
+
+    ChracterRestrict[] cr;
+
+    void OnEnable()
+    {
+        transitioning = 0.0f;
+    }
+
+    void Start()
+    {
+        cr = FindObjectsOfType<ChracterRestrict>();
+    }
+
     void LateUpdate()
     {
         Vector3 currentPos = character.transform.position;
@@ -25,10 +42,26 @@ public class SmoothFollow : MonoBehaviour
 
         //add a distance between the car's position and the camera's desired position, in the x coordinate because
         //of how the x/z axes on the cars are reversed
-        Vector3 wantedPos = new Vector3(currentPos.x, currentHeight, currentPos.z - dist);
+        
+        wantedPos = new Vector3(currentPos.x, currentHeight, currentPos.z - dist);
 
         //finally, set the camera's position to its desired position
-        this.transform.position = wantedPos;
+        if (transitioning < 1.0f)
+        {
+            transitioning += Time.deltaTime * transitionSpeed;
+            this.transform.position = Vector3.Lerp(this.transform.position, wantedPos, transitioning);
+            if (transitioning >= 1.0f)
+            {
+                foreach (ChracterRestrict cr2 in cr)
+                {
+                    cr2.startGame();
+                }
+            }
+        }
+        else
+        {
+            this.transform.position = wantedPos;
+        }
 
         this.transform.LookAt(character.transform);
     }

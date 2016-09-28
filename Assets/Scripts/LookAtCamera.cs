@@ -11,5 +11,6 @@ public class LookAtCamera : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         transform.LookAt(Camera.main.transform.position);
-	}
+        transform.eulerAngles = new Vector3(-90, transform.eulerAngles.y, 0);
+    }
 }
