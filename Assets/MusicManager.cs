@@ -24,7 +24,8 @@ public class MusicManager : MonoBehaviour
     }
 
     public static int soundlist_bgm = 0;
-    public static int soundlist_totalsounds = 1;
+    public static int soundlist_eat = 1;
+    public static int soundlist_totalsounds = 2;
 
     public void mute()
     {
@@ -55,15 +56,16 @@ public class MusicManager : MonoBehaviour
         SFX_Player = sounds[1];
 
         sfx = new AudioClip[soundlist_totalsounds];
-
-        //BGM_Player.clip = sfx[0];
-        //BGM_Player.loop = true;
-        //BGM_Player.Play();
+        sfx[0] = (AudioClip)Resources.Load("Audio/bgm_maoudamashii_cyber11");
+        BGM_Player.clip = sfx[0];
+        BGM_Player.loop = true;
+        BGM_Player.Play();
     }
 
     void Start()
     {
-        //sfx[1] = (AudioClip)Resources.Load("8bit_battle_bgm");
+        
+        sfx[1] = (AudioClip)Resources.Load("Audio/Motion-Eating01-1");
         //sfx[2] = (AudioClip)Resources.Load("8bit_button_press");
         //sfx[3] = (AudioClip)Resources.Load("8bit_sound_select");
         //sfx[4] = (AudioClip)Resources.Load("8bit_swipe");

@@ -17,6 +17,7 @@ public class Food : MonoBehaviour
         if (col.tag == "Player")
         {
             player.Eat(foodPoint);
+            MusicManager.Instance.PlaySound(MusicManager.soundlist_eat);
             Destroy(gameObject);
         }
     }
