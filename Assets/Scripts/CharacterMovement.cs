@@ -34,7 +34,7 @@ public class CharacterMovement : MonoBehaviour {
             GetComponent<Rigidbody>().velocity = movement * speed;
 
             if (moveHorizontal != 0 || moveVertical != 0)
-                transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(movement), 0.5f);
+                transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(movement), 0.8f);
         }
         
 	}

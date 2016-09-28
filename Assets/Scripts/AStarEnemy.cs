@@ -6,6 +6,11 @@ public class AStarEnemy : MonoBehaviour
     private GameObject target;
     private NavMeshAgent navMeshAgent;
 
+    void OnEnable()
+    {
+        HordeManager.Instance.AddEnemy(transform);
+    }
+
     // Use this for initialization
     void Start()
     {
@@ -22,9 +27,11 @@ public class AStarEnemy : MonoBehaviour
 
     public void Killed()
     {
+        HordeManager.Instance.RemoveEnemy(transform);
         Destroy(GetComponent<Rigidbody>());
         Destroy(GetComponent<BoxCollider>());
         Destroy(GetComponent<NavMeshAgent>());
+        Destroy(GetComponent<ChracterRestrict>());
         StartCoroutine("Die");
     }
 

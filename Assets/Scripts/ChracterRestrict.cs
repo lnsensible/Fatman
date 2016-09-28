@@ -15,6 +15,7 @@ public class ChracterRestrict : MonoBehaviour {
 
     public GameObject enemyPrefab;
 
+    [SerializeField]
     bool restrict = false;
 
 	void Start () {

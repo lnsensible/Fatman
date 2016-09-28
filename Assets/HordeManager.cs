@@ -1,0 +1,116 @@
+﻿using UnityEngine;
+using UnityEngine.UI;
+using System.Collections;
+using System.Collections.Generic;
+
+public class HordeManager : MonoBehaviour {
+
+    public float angleForEffect;
+
+    public float effectDistance;
+    public float effectTimeScale;
+    public float timeScaleAffectSpeed;
+
+    public float effectFOV;
+    public float FOVAffectSpeed;
+
+    public CanvasGroup bloodBorder;
+    public float bloodAppearSpeed;
+
+    List<Transform> enemies =new List<Transform>();
+    
+    [SerializeField]
+    GameObject nearestEnemy;
+    [SerializeField]
+    float nearestAngle;
+
+    public float distance;
+
+    Transform playerTransform;
+
+    bool isSlowmo = false;
+
+    public bool isSlow()
+    {
+        return isSlowmo;
+    }
+
+    private static HordeManager instance = null;
+
+    public static HordeManager Instance
+    {
+        get { return instance; }
+    }
+
+    void Awake()
+    {
+        if (instance != null && instance != this)
+        {
+            Destroy(this.gameObject);
+            return;
+        }
+
+        instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
+
+    public void AddEnemy(Transform t){
+        enemies.Add(t);
+    }
+
+    public void RemoveEnemy(Transform t){
+        enemies.Remove(t);
+    }
+
+	// Use this for initialization
+	void Start () {
+        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+	}
+	
+	// Update is called once per frame
+	void Update () {
+
+        distance = Mathf.Infinity;
+        float tmpd = 0;
+        for (int i = 0; i < enemies.Count; ++i)
+        {
+            tmpd = Vector3.Distance(enemies[i].position, playerTransform.position);
+            if (tmpd < distance)
+            {
+                distance = tmpd;
+                nearestEnemy = enemies[i].gameObject;
+            }
+        }
+
+        if (nearestEnemy != null)
+            nearestAngle = Mathf.Abs(Vector3.Angle(playerTransform.forward, nearestEnemy.transform.position - playerTransform.position));
+
+        if (!CharacterManager.Instance.isFever())
+        { 
+            if (distance < effectDistance && nearestAngle < angleForEffect)
+            {
+                isSlowmo = true;
+                Time.timeScale = Mathf.Lerp(Time.timeScale, effectTimeScale, timeScaleAffectSpeed * Time.unscaledDeltaTime);
+                Time.fixedDeltaTime = Time.timeScale * 0.02f;
+                Camera.main.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, effectFOV, FOVAffectSpeed * Time.unscaledDeltaTime);
+                bloodBorder.alpha += bloodAppearSpeed * Time.unscaledDeltaTime;
+            }
+            else
+            {
+                isSlowmo = false;
+                Time.timeScale = Mathf.Lerp(Time.timeScale, 1.0f, timeScaleAffectSpeed * Time.deltaTime);
+                Time.fixedDeltaTime = Time.timeScale * 0.02f;
+                Camera.main.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, 60, FOVAffectSpeed * Time.unscaledDeltaTime);
+                bloodBorder.alpha -= bloodAppearSpeed * Time.unscaledDeltaTime;
+            }
+        }
+	}
+
+    public void Fever()
+    {
+        isSlowmo = false;
+        bloodBorder.alpha = 0;
+        Time.timeScale = 1.0f;
+        Time.fixedDeltaTime = Time.timeScale * 0.02f;
+    }
+}

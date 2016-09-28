@@ -150,6 +150,7 @@ public class CharacterManager : MonoBehaviour {
         GaugeFX.Play();
         StartCoroutine("RainbowGauge");
         feverText.SetActive(true);
+        HordeManager.Instance.Fever();
     }
 
     public void UNFEVER()

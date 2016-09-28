@@ -31,14 +31,6 @@ public class PlayerScript : MonoBehaviour {
         CharacterManager.Instance.EatFood(foodpoint);
     }
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            StartCoroutine("Grow");
-        }
-    }
-
     IEnumerator Grow()
     {
         float growthleft = GrowTimer;
@@ -81,7 +73,7 @@ public class PlayerScript : MonoBehaviour {
             StartCoroutine("Grow");
             ate = 0;
             fatLevel += 1;
-            hungerUpperLimit += 2;
+            hungerUpperLimit += 1;
         }
     } 
 
