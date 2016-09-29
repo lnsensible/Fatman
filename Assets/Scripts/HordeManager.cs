@@ -24,6 +24,8 @@ public class HordeManager : MonoBehaviour {
     [SerializeField]
     float nearestAngle;
 
+    float RealEffectDistance;
+
     public float distance;
 
     Transform playerTransform;
@@ -78,6 +80,7 @@ public class HordeManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        RealEffectDistance = playerTransform.localScale.x + effectDistance;
 
         curentBoostTime -= Time.deltaTime;
 
@@ -97,8 +100,8 @@ public class HordeManager : MonoBehaviour {
             nearestAngle = Mathf.Abs(Vector3.Angle(playerTransform.forward, nearestEnemy.transform.position - playerTransform.position));
 
         if (!CharacterManager.Instance.isFever())
-        { 
-            if (distance < effectDistance && nearestAngle < angleForEffect)
+        {
+            if (distance < RealEffectDistance && nearestAngle < angleForEffect)
             {
                 triggerBoost = true;
                 isSlowmo = true;

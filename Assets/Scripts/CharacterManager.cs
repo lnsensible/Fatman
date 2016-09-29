@@ -104,7 +104,7 @@ public class CharacterManager : MonoBehaviour {
         float max = 1;
         float min = 0;
         float t = 0;
-        while (feverFill.fillAmount > 0)
+        while (feverFill.fillAmount > min)
         {
             yield return null;
             t += Time.deltaTime/feverTime;

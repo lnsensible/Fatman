@@ -21,7 +21,10 @@ public class TitleScreen : MonoBehaviour {
     public float roadScaleSpeed;
 
     public CanvasGroup[] UIFadeIn;
+    public CanvasGroup[] UIFadeOut;
     public float FadeinSpeed;
+
+    public TitleCountdown instructioncountdown;
 
 	// Use this for initialization
 	void Start () {
@@ -71,6 +74,8 @@ public class TitleScreen : MonoBehaviour {
         startbutton.gameObject.SetActive(false);
         maincam.GetComponent<SmoothFollow>().enabled = true;
         StartCoroutine("FadeUI");
+        instructioncountdown.start();
+
     }
 
     IEnumerator FadeUI()
@@ -82,6 +87,16 @@ public class TitleScreen : MonoBehaviour {
             {
                 UIFadeIn[i].alpha += FadeinSpeed * Time.deltaTime;
             }
+            for (int i = 0; i < UIFadeOut.Length; ++i)
+            {
+                UIFadeOut[i].alpha -= FadeinSpeed * Time.deltaTime;
+            }
+
+        }
+
+        for (int i = 0; i < UIFadeOut.Length; ++i)
+        {
+            UIFadeOut[i].gameObject.SetActive(false);
         }
     }
 
