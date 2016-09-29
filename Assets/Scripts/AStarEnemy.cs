@@ -5,7 +5,9 @@ public class AStarEnemy : MonoBehaviour
 {
     private GameObject target;
     private NavMeshAgent navMeshAgent;
-    private EnemySpawner enemySpawner;
+    [SerializeField]
+    private float multiplyBy = 1.0f;
+
 
     void OnEnable()
     {
@@ -17,22 +19,23 @@ public class AStarEnemy : MonoBehaviour
     {
         target = GameObject.FindGameObjectWithTag("Player");
         navMeshAgent = GetComponent<NavMeshAgent>();
-        enemySpawner = FindObjectOfType<EnemySpawner>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (navMeshAgent != null)
+        if (CharacterManager.Instance.isFever() == true)
         {
-            if (CharacterManager.Instance.isFever() == false)
-            {
+            transform.rotation = Quaternion.LookRotation(transform.position - target.transform.position);
+            Vector3 runTo = transform.position + transform.forward * multiplyBy;
+            NavMeshHit hit;
+            NavMesh.SamplePosition(runTo, out hit, 5, 1 << NavMesh.GetAreaFromName("Walkable"));
+            navMeshAgent.destination = hit.position;
+        }
+        else
+        {
+            if (navMeshAgent != null)
                 navMeshAgent.destination = target.transform.position;
-            }
-            else
-            {
-                navMeshAgent.destination = enemySpawner.transform.position;
-            }
         }
     }
 
