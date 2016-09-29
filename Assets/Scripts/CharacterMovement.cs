@@ -6,6 +6,8 @@ public class CharacterMovement : MonoBehaviour {
     public float speed;
     public bool knockback;
 
+    public float dangerSpeedMultiplier = 1.2f;
+
     TitleScreen titlemanager;
 	// Use this for initialization
 	void Start () {
@@ -32,6 +34,10 @@ public class CharacterMovement : MonoBehaviour {
 
             Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
             GetComponent<Rigidbody>().velocity = movement * speed;
+            if (HordeManager.Instance.CanSpeedup())
+            {
+                GetComponent<Rigidbody>().velocity *= dangerSpeedMultiplier;
+            }
 
             if (moveHorizontal != 0 || moveVertical != 0)
                 transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(movement), 0.8f);

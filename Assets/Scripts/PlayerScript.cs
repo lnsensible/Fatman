@@ -21,6 +21,8 @@ public class PlayerScript : MonoBehaviour {
     public ParticleSystem eatEffect;
     public ParticleSystem groweffect;
 
+    public int foodworth;
+
 	// Use this for initialization
 	void Start () {
         reference = this;
@@ -37,6 +39,7 @@ public class PlayerScript : MonoBehaviour {
     public void Eat(int foodpoint)
     {
         eatEffect.Play();
+        ScoreManager.Instance.AddScore(foodworth);
         ate += 1;
         GetComponent<Rigidbody>().mass += 1;
         SatisfyStomach();

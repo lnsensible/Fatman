@@ -30,6 +30,10 @@ public class HordeManager : MonoBehaviour {
 
     bool isSlowmo = false;
 
+    float curentBoostTime;
+    public float boostTime = 0.2f;
+    bool triggerBoost = false;
+
     public bool isSlow()
     {
         return isSlowmo;
@@ -66,9 +70,16 @@ public class HordeManager : MonoBehaviour {
 	void Start () {
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
 	}
+
+    public bool CanSpeedup()
+    {
+        return (curentBoostTime > 0.0f);
+    }
 	
 	// Update is called once per frame
 	void Update () {
+
+        curentBoostTime -= Time.deltaTime;
 
         distance = Mathf.Infinity;
         float tmpd = 0;
@@ -89,6 +100,7 @@ public class HordeManager : MonoBehaviour {
         { 
             if (distance < effectDistance && nearestAngle < angleForEffect)
             {
+                triggerBoost = true;
                 isSlowmo = true;
                 Time.timeScale = Mathf.Lerp(Time.timeScale, effectTimeScale, timeScaleAffectSpeed * Time.unscaledDeltaTime);
                 Time.fixedDeltaTime = Time.timeScale * 0.02f;
@@ -97,6 +109,11 @@ public class HordeManager : MonoBehaviour {
             }
             else
             {
+                if (triggerBoost)
+                {
+                    curentBoostTime = boostTime;
+                    triggerBoost = false;
+                }
                 isSlowmo = false;
                 Time.timeScale = Mathf.Lerp(Time.timeScale, 1.0f, timeScaleAffectSpeed * Time.deltaTime);
                 Time.fixedDeltaTime = Time.timeScale * 0.02f;
