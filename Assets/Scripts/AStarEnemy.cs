@@ -5,6 +5,7 @@ public class AStarEnemy : MonoBehaviour
 {
     private GameObject target;
     private NavMeshAgent navMeshAgent;
+    private EnemySpawner enemySpawner;
 
     void OnEnable()
     {
@@ -16,13 +17,23 @@ public class AStarEnemy : MonoBehaviour
     {
         target = GameObject.FindGameObjectWithTag("Player");
         navMeshAgent = GetComponent<NavMeshAgent>();
+        enemySpawner = FindObjectOfType<EnemySpawner>();
     }
 
     // Update is called once per frame
     void Update()
     {
         if (navMeshAgent != null)
-        navMeshAgent.destination = target.transform.position;
+        {
+            if (CharacterManager.Instance.isFever() == false)
+            {
+                navMeshAgent.destination = target.transform.position;
+            }
+            else
+            {
+                navMeshAgent.destination = enemySpawner.transform.position;
+            }
+        }
     }
 
     public void Killed()
