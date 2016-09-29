@@ -34,9 +34,14 @@ public class CharacterManager : MonoBehaviour {
     [SerializeField]
     GameObject feverText;
 
+    [SerializeField]
+    ParticleSystem feverRingFX;
+
     float feverAmount = 0;
     bool inFeverMode = false;
     float feverTimer = 0.0f;
+
+    Transform playerTransform;
 
     private static CharacterManager instance = null;
 
@@ -64,6 +69,7 @@ public class CharacterManager : MonoBehaviour {
 
     void Start()
     {
+        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         GaugeOriginalColor = feverFill.color;
 
         for (int i = 0; i < FeverFX.Length; ++i)
@@ -139,6 +145,10 @@ public class CharacterManager : MonoBehaviour {
         feverTimer = feverTime;
         feverAmount = 0;
         StopAllCoroutines();
+
+        feverRingFX.Play();
+        feverRingFX.transform.localScale = playerTransform.localScale * 2;
+
         StartCoroutine("ChangeFOV", true);
         for (int i = 0; i < FeverFX.Length; ++i)
         {
@@ -157,6 +167,9 @@ public class CharacterManager : MonoBehaviour {
     {
         inFeverMode = false;
         StopAllCoroutines();
+
+        feverRingFX.Stop();
+
         StartCoroutine("ChangeFOV", false);
         for (int i = 0; i < FeverFX.Length; ++i)
         {

@@ -18,13 +18,25 @@ public class PlayerScript : MonoBehaviour {
     public float GrowSpeed = 0.5f;
     public float GrowTimer = 1.0f;
 
+    public ParticleSystem eatEffect;
+    public ParticleSystem groweffect;
+
 	// Use this for initialization
 	void Start () {
         reference = this;
 	}
 
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            Eat(1);
+        }
+    }
+
     public void Eat(int foodpoint)
     {
+        eatEffect.Play();
         ate += 1;
         GetComponent<Rigidbody>().mass += 1;
         SatisfyStomach();
@@ -33,14 +45,17 @@ public class PlayerScript : MonoBehaviour {
 
     IEnumerator Grow()
     {
+        groweffect.Play();
         float growthleft = GrowTimer;
         float growthspeed = GrowSpeed / growthleft;
         while (growthleft > 0.0f)
         {
             yield return null;
+            groweffect.startSize += (growthspeed * Time.deltaTime);
             transform.localScale += new Vector3(growthspeed * Time.deltaTime, growthspeed * Time.deltaTime, growthspeed * Time.deltaTime);
             growthleft -= Time.deltaTime;
         }
+        eatEffect.startSize = transform.localScale.x * 3.0f;
     }
 
     void OnCollisionEnter(Collision col)
@@ -77,7 +92,7 @@ public class PlayerScript : MonoBehaviour {
             StartCoroutine("Grow");
             ate = 0;
             fatLevel += 1;
-            hungerUpperLimit += 1;
+            hungerUpperLimit += 0;
         }
     } 
 

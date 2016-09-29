@@ -58,6 +58,7 @@ public class LeftoverParticle : MonoBehaviour {
             food.transform.localScale += scale * Time.deltaTime;
         }
 
+        GetComponentInChildren<Collider>().enabled = true;
         spawnPS.Stop();
         spawnPS.loop = false;
     }
