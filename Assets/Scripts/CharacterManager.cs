@@ -169,6 +169,7 @@ public class CharacterManager : MonoBehaviour {
         StopAllCoroutines();
 
         feverRingFX.Stop();
+        feverRingFX.Clear();
 
         StartCoroutine("ChangeFOV", false);
         for (int i = 0; i < FeverFX.Length; ++i)
