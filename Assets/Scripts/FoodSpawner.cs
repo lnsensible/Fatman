@@ -16,15 +16,21 @@ public class FoodSpawner : MonoBehaviour
         int count = 0;
         while (count < 3)
         {
-            var spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
-            if (spawnPoint.transform.childCount == 0)
-            {
-                int random = Random.Range(0, foodPrefabs.Length);
-                GameObject food = Instantiate(foodPrefabs[random], spawnPoint.transform.position, Quaternion.identity) as GameObject;
-                food.transform.SetParent(spawnPoint.transform);
-                food.GetComponent<Food>().foodPoint = foodPoints[random];
-                ++count;
-            }
+            SpawnFood();
+            ++count;
+        }
+    }
+
+    void SpawnFood()
+    {
+        GameObject spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
+        if (spawnPoint.transform.childCount == 0)
+        {
+            int random = Random.Range(0, foodPrefabs.Length);
+            GameObject food = (GameObject)Instantiate(foodPrefabs[random], spawnPoint.transform.position, Quaternion.identity);
+            food.transform.SetParent(spawnPoint.transform);
+            food.GetComponent<LeftoverParticle>().spawn();
+            food.GetComponentInChildren<Food>().foodPoint = foodPoints[random];
         }
     }
 
@@ -33,12 +39,7 @@ public class FoodSpawner : MonoBehaviour
     {
         while (GameObject.FindGameObjectsWithTag("Food").Length < 3)
         {
-            var spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
-            if (spawnPoint.transform.childCount == 0)
-            {
-                GameObject food = Instantiate(foodPrefabs[Random.Range(0, foodPrefabs.Length)], spawnPoint.transform.position, Quaternion.identity) as GameObject;
-                food.transform.SetParent(spawnPoint.transform);
-            }
+            SpawnFood();
         }
     }
 }

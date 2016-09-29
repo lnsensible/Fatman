@@ -18,8 +18,10 @@ public class Food : MonoBehaviour
         {
             player.Eat(foodPoint);
             if (MusicManager.Instance)
-            MusicManager.Instance.PlaySound(MusicManager.soundlist_eat);
+                MusicManager.Instance.PlaySound(MusicManager.soundlist_eat);
+            GetComponentInParent<LeftoverParticle>().Remove();
             Destroy(gameObject);
+           
         }
     }
 
