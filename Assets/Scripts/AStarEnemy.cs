@@ -5,9 +5,9 @@ public class AStarEnemy : MonoBehaviour
 {
     private GameObject target;
     private NavMeshAgent navMeshAgent;
-    [SerializeField]
     private float multiplyBy = 1.0f;
-
+    public float chaseSpeed;
+    public float fleeSpeed;
 
     void OnEnable()
     {
@@ -24,18 +24,22 @@ public class AStarEnemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (CharacterManager.Instance.isFever() == true)
+        if (navMeshAgent != null)
         {
-            transform.rotation = Quaternion.LookRotation(transform.position - target.transform.position);
-            Vector3 runTo = transform.position + transform.forward * multiplyBy;
-            NavMeshHit hit;
-            NavMesh.SamplePosition(runTo, out hit, 5, 1 << NavMesh.GetAreaFromName("Walkable"));
-            navMeshAgent.destination = hit.position;
-        }
-        else
-        {
-            if (navMeshAgent != null)
+            if (CharacterManager.Instance.isFever() == true)
+            {
+                transform.rotation = Quaternion.LookRotation(transform.position - target.transform.position);
+                Vector3 runTo = transform.position + transform.forward * multiplyBy;
+                NavMeshHit hit;
+                NavMesh.SamplePosition(runTo, out hit, 5, 1 << NavMesh.GetAreaFromName("Walkable"));
+                navMeshAgent.destination = hit.position;
+                navMeshAgent.speed = fleeSpeed;
+            }
+            else
+            {
                 navMeshAgent.destination = target.transform.position;
+                navMeshAgent.speed = chaseSpeed;
+            }
         }
     }
 
