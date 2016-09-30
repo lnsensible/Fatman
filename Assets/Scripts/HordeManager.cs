@@ -104,6 +104,7 @@ public class HordeManager : MonoBehaviour {
             {
                 triggerBoost = true;
                 isSlowmo = true;
+                if (!GameOverManager.Instance.isOver)
                 Time.timeScale = Mathf.Lerp(Time.timeScale, effectTimeScale, timeScaleAffectSpeed * Time.unscaledDeltaTime);
                 Time.fixedDeltaTime = Time.timeScale * 0.02f;
                 Camera.main.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, effectFOV, FOVAffectSpeed * Time.unscaledDeltaTime);
@@ -117,6 +118,7 @@ public class HordeManager : MonoBehaviour {
                     triggerBoost = false;
                 }
                 isSlowmo = false;
+                if (!GameOverManager.Instance.isOver)
                 Time.timeScale = Mathf.Lerp(Time.timeScale, 1.0f, timeScaleAffectSpeed * Time.deltaTime);
                 Time.fixedDeltaTime = Time.timeScale * 0.02f;
                 Camera.main.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, 60, FOVAffectSpeed * Time.unscaledDeltaTime);

@@ -11,7 +11,7 @@ public class GameOverManager : MonoBehaviour {
     public CanvasGroup transitionCG;
     public float transitionSpeed;
 
-    bool isOver = false;
+    public bool isOver = false;
 
     private static GameOverManager instance = null;
 
@@ -34,7 +34,7 @@ public class GameOverManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKeyDown(KeyCode.Q))
         {
             //GameOver();
         }
@@ -71,6 +71,6 @@ public class GameOverManager : MonoBehaviour {
 
         //pass score info
         ScoreManager.Instance.SaveScoreToPlayerPref();
-        SceneManager.LoadScene("GameOver");
+        SceneManager.LoadScene("GameOver", LoadSceneMode.Single);
     }
 }
