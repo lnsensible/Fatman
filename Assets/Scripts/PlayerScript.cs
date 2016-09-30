@@ -69,17 +69,19 @@ public class PlayerScript : MonoBehaviour {
             {
                 if (ScoreManager.Instance)
                 {
+                    ScoreManager.Instance.hitNurse();
                     ScoreManager.Instance.AddCombo(col.transform);
                 }
                 col.gameObject.GetComponent<AStarEnemy>().Killed();
             }
             else
             {
-                Vector3 dir = col.contacts[0].point - transform.position;
-                dir = -dir.normalized;
-                GetComponent<CharacterMovement>().Knocked();
-                GetComponent<Rigidbody>().velocity = (dir * 5.0f);
-                transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(dir), 0.5f);
+                GameOverManager.Instance.GameOver();
+                //Vector3 dir = col.contacts[0].point - transform.position;
+                //dir = -dir.normalized;
+                //GetComponent<CharacterMovement>().Knocked();
+                //GetComponent<Rigidbody>().velocity = (dir * 5.0f);
+                //transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(dir), 0.5f);
             }
         }
     }

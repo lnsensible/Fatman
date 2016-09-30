@@ -37,7 +37,7 @@ public class TitleScreen : MonoBehaviour {
     {
         if (MoveRoad)
         {
-            fakeRoad.transform.position -= new Vector3(roadSpeed, 0, 0);
+            fakeRoad.transform.position -= new Vector3(roadSpeed * Time.deltaTime, 0, 0);
         }
     }
 
@@ -100,4 +100,9 @@ public class TitleScreen : MonoBehaviour {
         }
     }
 
+    public void Quit()
+    {
+        Application.Quit();
+
+    }
 }

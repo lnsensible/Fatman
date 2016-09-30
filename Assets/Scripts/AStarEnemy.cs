@@ -46,10 +46,16 @@ public class AStarEnemy : MonoBehaviour
     public void Killed()
     {
         HordeManager.Instance.RemoveEnemy(transform);
-        Destroy(GetComponent<Rigidbody>());
+        //Destroy(GetComponent<Rigidbody>());
         Destroy(GetComponent<BoxCollider>());
         Destroy(GetComponent<NavMeshAgent>());
         Destroy(GetComponent<ChracterRestrict>());
+
+        Vector3 velocity = (target.GetComponent<Rigidbody>().velocity.normalized + Vector3.up) * 50;
+        Vector3 torque = new Vector3(Random.Range(-100, 100), Random.Range(-100, 100), Random.Range(-100, 100)).normalized * 50;
+        //GetComponent<Rigidbody>().AddForce(velocity, ForceMode.Impulse);
+        GetComponent<Rigidbody>().AddRelativeTorque(torque, ForceMode.Impulse);
+
         StartCoroutine("Die");
     }
 

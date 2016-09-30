@@ -57,7 +57,6 @@ public class HordeManager : MonoBehaviour {
         }
 
         instance = this;
-        DontDestroyOnLoad(gameObject);
     }
 
     public void AddEnemy(Transform t){

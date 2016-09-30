@@ -18,7 +18,8 @@ public class FakeRoadReset : MonoBehaviour {
 	    if (transform.position.x <= ResetPosition)
         {
             transform.position = new Vector3(ResetDistance, transform.position.y, transform.position.z);
-            if (titlemanager.GameStarted)
+
+            if (titlemanager && titlemanager.GameStarted)
             {
                 titlemanager.DropRoad();
             }
