@@ -27,7 +27,7 @@ public class CharacterMovement : MonoBehaviour {
     }
 	// Update is called once per frame
 	void Update () {
-        if (!knockback && !titlemanager.inTitle)
+        if (!knockback && !titlemanager.inTitle && Time.timeScale != 0)
         {
             float moveHorizontal = Input.GetAxis("Horizontal");
             float moveVertical = Input.GetAxis("Vertical");

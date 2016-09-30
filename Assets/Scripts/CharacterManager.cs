@@ -33,6 +33,7 @@ public class CharacterManager : MonoBehaviour {
 
     [SerializeField]
     GameObject feverText;
+    public Shake[] shakes;
 
     [SerializeField]
     ParticleSystem feverRingFX;
@@ -42,6 +43,15 @@ public class CharacterManager : MonoBehaviour {
     float feverTimer = 0.0f;
 
     Transform playerTransform;
+
+    public Animator fever2D;
+    public string fever2dname;
+    public Animator unfever2D;
+    public string unfever2dname;
+
+    public float rollSpeed;
+
+    public Transform modelTransform;
 
     private static CharacterManager instance = null;
 
@@ -64,7 +74,6 @@ public class CharacterManager : MonoBehaviour {
         }
 
         instance = this;
-        DontDestroyOnLoad(gameObject);
     }
 
     void Start()
@@ -141,6 +150,14 @@ public class CharacterManager : MonoBehaviour {
 
     public void FEVER()
     {
+        Time.timeScale = 0;
+        fever2D.gameObject.SetActive(true);
+        fever2D.Play(fever2dname);
+    }
+
+    public void StartFever(bool roll = false)
+    {
+        Time.timeScale = 1;
         inFeverMode = true;
         feverTimer = feverTime;
         feverAmount = 0;
@@ -159,27 +176,64 @@ public class CharacterManager : MonoBehaviour {
         GaugeFX.Play();
         StartCoroutine("RainbowGauge");
         feverText.SetActive(true);
+        for (int i = 0; i < shakes.Length; ++i)
+        {
+            shakes[i].enabled = true;
+        }
+
+        //if (roll)
+        {
+            StartCoroutine("Roll");
+        }
         HordeManager.Instance.Fever();
         ScoreManager.Instance.Fever();
     }
 
+    IEnumerator Roll()
+    {
+        while (true)
+        {
+            yield return null;
+            modelTransform.Rotate(Vector3.left, rollSpeed * Time.deltaTime, Space.Self);
+        }
+    }
+
     public void UNFEVER()
     {
-        inFeverMode = false;
-        StopAllCoroutines();
-
         feverRingFX.Stop();
         feverRingFX.Clear();
 
-        StartCoroutine("ChangeFOV", false);
+        GaugeFX.Stop();
+        GaugeFX.Clear();
+
         for (int i = 0; i < FeverFX.Length; ++i)
         {
             FeverFX[i].Stop();
+            FeverFX[i].Clear();
         }
-        GaugeFX.Stop();
-        feverFill.color = GaugeOriginalColor;
+
         feverText.SetActive(false);
+
+        StopCoroutine("Roll");
+
+        Time.timeScale = 0;
+
+        unfever2D.gameObject.SetActive(true);
+        unfever2D.Play(unfever2dname);
     }
+
+    public void endFever()
+    {
+        Time.timeScale = 1;
+        inFeverMode = false;
+        StopAllCoroutines();
+
+        StartCoroutine("ChangeFOV", false);
+
+        feverFill.color = GaugeOriginalColor;
+        
+    }
+
     IEnumerator RainbowGauge()
     {
         while (true)
