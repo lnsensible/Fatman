@@ -33,7 +33,7 @@ public class TimeCounter : MonoBehaviour
       int min = (int)(ElapsedTime / 60) % 60;
       int sec = (int)(ElapsedTime) % 60;
       int msec = (int)(ElapsedTime * 100) % 100;
-      time.text = min.ToString("D2") + ":" + sec.ToString("D2") + ":" + msec.ToString("D2");
+      time.text = min.ToString("D2") + "'" + sec.ToString("D2") + "\"" + msec.ToString("D2");
     }
   }
 
