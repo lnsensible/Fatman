@@ -46,8 +46,10 @@ public class ScoreManager : MonoBehaviour {
     public float camFOV;
 
     int comboCount = 0;
-    
 
+    int foodEaten;
+    int nurseHit;
+    
     private static ScoreManager instance = null;
 
     public static ScoreManager Instance
@@ -64,9 +66,17 @@ public class ScoreManager : MonoBehaviour {
         }
 
         instance = this;
-        DontDestroyOnLoad(gameObject);
     }
 
+    public void ateFood()
+    {
+        foodEaten++;
+    }
+
+    public void hitNurse()
+    {
+        nurseHit++;
+    }
 
 	// Use this for initialization
 	void Start () {
@@ -205,6 +215,13 @@ public class ScoreManager : MonoBehaviour {
                 }
             }
         }
+    }
+
+    public void SaveScoreToPlayerPref()
+    {
+        PlayerPrefs.SetInt("foodeaten", foodEaten);
+        PlayerPrefs.SetInt("nursehit", nurseHit);
+        PlayerPrefs.SetFloat("timesurvive", 0);
     }
 
     //public static string[] IntToIntArray(int num)
