@@ -16,6 +16,10 @@ public class FeverCallback : MonoBehaviour {
         StartCoroutine("UnfeverDisappear");
     }
 
+    //public void PrepareRoll()
+    //{
+    //    CharacterManager.Instance.PrepareRoll();
+    //}
 
     IEnumerator UnfeverDisappear()
     {

@@ -15,7 +15,7 @@ public class SmoothFollow : MonoBehaviour
     public float transitionSpeed;
 
     public static Vector3 wantedPos;
-
+    public static bool shaking;
     ChracterRestrict[] cr;
 
     void OnEnable()
@@ -60,6 +60,7 @@ public class SmoothFollow : MonoBehaviour
         }
         else
         {
+            if (!shaking)
             this.transform.position = wantedPos;
         }
 

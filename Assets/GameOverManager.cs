@@ -36,7 +36,7 @@ public class GameOverManager : MonoBehaviour {
 	void Update () {
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            //GameOver();
+            GameOver();
         }
 	}
 

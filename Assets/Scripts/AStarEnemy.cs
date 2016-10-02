@@ -9,6 +9,10 @@ public class AStarEnemy : MonoBehaviour
     public float chaseSpeed;
     public float fleeSpeed;
 
+    public float flySpeed = 100;
+
+    Rigidbody myRigidbody;
+
     void OnEnable()
     {
         HordeManager.Instance.AddEnemy(transform);
@@ -17,8 +21,11 @@ public class AStarEnemy : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        myRigidbody = GetComponent<Rigidbody>();
         target = GameObject.FindGameObjectWithTag("Player");
         navMeshAgent = GetComponent<NavMeshAgent>();
+
+        navMeshAgent.updateRotation = true;
     }
 
     // Update is called once per frame
@@ -51,12 +58,18 @@ public class AStarEnemy : MonoBehaviour
         Destroy(GetComponent<NavMeshAgent>());
         Destroy(GetComponent<ChracterRestrict>());
 
-        Vector3 velocity = (target.GetComponent<Rigidbody>().velocity.normalized + Vector3.up) * 50;
-        Vector3 torque = new Vector3(Random.Range(-100, 100), Random.Range(-100, 100), Random.Range(-100, 100)).normalized * 50;
-        //GetComponent<Rigidbody>().AddForce(velocity, ForceMode.Impulse);
-        GetComponent<Rigidbody>().AddRelativeTorque(torque, ForceMode.Impulse);
+        Vector3 velocity = (target.GetComponent<Rigidbody>().velocity.normalized + Vector3.up) * flySpeed;
+        Vector3 torque = new Vector3(Random.Range(-100, 100), Random.Range(-100, 100), Random.Range(-100, 100)).normalized * flySpeed;
+        myRigidbody.velocity = velocity;
+        myRigidbody.AddRelativeTorque(torque, ForceMode.Impulse);
 
         StartCoroutine("Die");
+    }
+
+    public void Attack()
+    {
+        GetComponentInChildren<Animator>().updateMode = AnimatorUpdateMode.UnscaledTime;
+        GetComponentInChildren<Animator>().Play("Attack");
     }
 
     IEnumerator Die()

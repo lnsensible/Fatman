@@ -51,7 +51,17 @@ public class CharacterManager : MonoBehaviour {
 
     public float rollSpeed;
 
+    int currentIndex = 0;
     public Transform modelTransform;
+
+    public GameObject[] characterModels;
+
+    public Animator[] playeranimator;
+    public string speedParameterName;
+
+    public string gameoveranimname;
+    public string rollanimname;
+    public string runanimname;
 
     private static CharacterManager instance = null;
 
@@ -78,6 +88,8 @@ public class CharacterManager : MonoBehaviour {
 
     void Start()
     {
+        playeranimator[currentIndex].SetFloat(speedParameterName, 999);
+
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         GaugeOriginalColor = feverFill.color;
 
@@ -181,7 +193,7 @@ public class CharacterManager : MonoBehaviour {
             shakes[i].enabled = true;
         }
 
-        //if (roll)
+        if (currentIndex == 2)
         {
             StartCoroutine("Roll");
         }
@@ -191,11 +203,24 @@ public class CharacterManager : MonoBehaviour {
 
     IEnumerator Roll()
     {
+        PrepareRoll();
         while (true)
         {
             yield return null;
             modelTransform.Rotate(Vector3.left, rollSpeed * Time.deltaTime, Space.Self);
         }
+    }
+
+    public void PrepareRoll(){
+        playeranimator[currentIndex].updateMode = AnimatorUpdateMode.UnscaledTime;
+        playeranimator[currentIndex].Play(rollanimname);
+    }
+
+    public void ChangeSize()
+    {
+        characterModels[currentIndex].SetActive(false);
+        currentIndex += 1;
+        characterModels[currentIndex].SetActive(true);
     }
 
     public void UNFEVER()
@@ -215,7 +240,10 @@ public class CharacterManager : MonoBehaviour {
         feverText.SetActive(false);
 
         StopCoroutine("Roll");
+        modelTransform.localEulerAngles = Vector3.zero;
 
+        playeranimator[currentIndex].updateMode = AnimatorUpdateMode.Normal;
+        playeranimator[currentIndex].Play(runanimname);
         Time.timeScale = 0;
 
         unfever2D.gameObject.SetActive(true);
@@ -281,5 +309,16 @@ public class CharacterManager : MonoBehaviour {
             }
             yield return null;
         }
+    }
+
+    public void GameOverAnimation()
+    {
+        playeranimator[currentIndex].updateMode = AnimatorUpdateMode.UnscaledTime;
+        playeranimator[currentIndex].Play(gameoveranimname);
+    }
+
+    public void SetAnimatorSpeed(float s)
+    {
+        playeranimator[currentIndex].SetFloat(speedParameterName, s);
     }
 }

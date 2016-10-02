@@ -37,8 +37,6 @@ public class ScoreManager : MonoBehaviour {
 
     public Canvas parentCanvas;
 
-    Transform player;
-
     public int baseEnemyScore;
     public float comboMultiplier;
     public int maxComboScore;
@@ -49,6 +47,7 @@ public class ScoreManager : MonoBehaviour {
 
     int foodEaten;
     int nurseHit;
+    int nurseScore;
     
     private static ScoreManager instance = null;
 
@@ -80,7 +79,6 @@ public class ScoreManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        player = GameObject.FindGameObjectWithTag("Player").transform;
         originalHeight = scoreText[0].transform.localPosition.y;
         jumpHeight += originalHeight;
 
@@ -128,6 +126,7 @@ public class ScoreManager : MonoBehaviour {
 
         clone.GetComponent<Text>().text = worth.ToString();
 
+        nurseScore += worth;
         AddScore(worth);
     }
 
@@ -221,7 +220,8 @@ public class ScoreManager : MonoBehaviour {
     {
         PlayerPrefs.SetInt("foodeaten", foodEaten);
         PlayerPrefs.SetInt("nursehit", nurseHit);
-        PlayerPrefs.SetFloat("timesurvive", 0);
+        PlayerPrefs.SetInt("nursescore", nurseScore);
+        PlayerPrefs.SetInt("elapsedtime", Mathf.RoundToInt(FindObjectOfType<TimeCounter>().ElapsedTime) % 60);
     }
 
     //public static string[] IntToIntArray(int num)

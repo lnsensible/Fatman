@@ -23,6 +23,15 @@ public class PlayerScript : MonoBehaviour {
 
     public int foodworth;
 
+    public float BumpFOVEffect;
+    public float bumpShakeTime;
+    public float bumpShakeStrength;
+
+    public int secondLevel;
+    public int thirdLevel;
+
+    int level = 0;
+
 	// Use this for initialization
 	void Start () {
         reference = this;
@@ -32,7 +41,7 @@ public class PlayerScript : MonoBehaviour {
     {
         if (Input.GetKeyDown(KeyCode.V))
         {
-            Eat(1);
+            StartCoroutine("ShakeCamera"); 
         }
     }
 
@@ -72,10 +81,13 @@ public class PlayerScript : MonoBehaviour {
                     ScoreManager.Instance.hitNurse();
                     ScoreManager.Instance.AddCombo(col.transform);
                 }
+                StartCoroutine("ShakeCamera"); 
                 col.gameObject.GetComponent<AStarEnemy>().Killed();
             }
             else
             {
+                col.transform.GetComponent<AStarEnemy>().Attack();
+                CharacterManager.Instance.GameOverAnimation();
                 GameOverManager.Instance.GameOver();
                 //Vector3 dir = col.contacts[0].point - transform.position;
                 //dir = -dir.normalized;
@@ -84,6 +96,25 @@ public class PlayerScript : MonoBehaviour {
                 //transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(dir), 0.5f);
             }
         }
+        else if (col.transform.tag == "Obstacle")
+        {
+            StartCoroutine("ShakeCamera"); 
+        }
+    }
+
+    IEnumerator ShakeCamera()
+    {
+        SmoothFollow.shaking = true;
+        float myrandomseed = Random.Range(0.0f, 100.0f);
+        float amount = bumpShakeTime; //how much it shakes
+        while (amount > 0.0f)
+        {
+            yield return null;
+            amount -= Time.deltaTime;
+            Camera.main.transform.localPosition = new Vector3(SmoothFollow.wantedPos.x + (Mathf.Sin(myrandomseed) * bumpShakeStrength), SmoothFollow.wantedPos.y, SmoothFollow.wantedPos.z);
+            myrandomseed += Random.Range(0, 50.0f);
+        }
+        SmoothFollow.shaking = false;
     }
 
     ///
@@ -98,6 +129,17 @@ public class PlayerScript : MonoBehaviour {
             ate = 0;
             fatLevel += 1;
             hungerUpperLimit += 0;
+
+            if (fatLevel > secondLevel && level == 0)
+            {
+                level++;
+                CharacterManager.Instance.ChangeSize();
+            }
+            else if (fatLevel > thirdLevel && level == 1)
+            {
+                level++;
+                CharacterManager.Instance.ChangeSize();
+            }
         }
     } 
 

@@ -10,8 +10,6 @@ public class TitleScreen : MonoBehaviour {
     public bool GameStarted = false;
     public bool MoveRoad = true;
 
-    public Button startbutton;
-
     Transform player;
     Camera maincam;
 
@@ -26,11 +24,22 @@ public class TitleScreen : MonoBehaviour {
 
     public TitleCountdown instructioncountdown;
 
+    public Text Highscore;
+
+    public CanvasGroup ScreenHider;
+    public float FadeOutSpeed;
+
 	// Use this for initialization
 	void Start () {
-        maincam = Camera.main;
-        player = GameObject.FindGameObjectWithTag("Player").transform;
-        maincam.transform.LookAt(player.transform);
+
+        ScreenHider.alpha = 1;
+        ScreenHider.blocksRaycasts = true;
+    maincam = Camera.main;
+    player = GameObject.FindGameObjectWithTag("Player").transform;
+    maincam.transform.LookAt(player.transform);
+        Highscore.text += PlayerPrefs.GetInt("HIGHSCORE", 0);
+
+        StartCoroutine("Fadeout");
     }
 
     void Update()
@@ -71,7 +80,6 @@ public class TitleScreen : MonoBehaviour {
 
     public void StartGame()
     {
-        startbutton.gameObject.SetActive(false);
         maincam.GetComponent<SmoothFollow>().enabled = true;
         StartCoroutine("FadeUI");
         instructioncountdown.start();
@@ -98,6 +106,17 @@ public class TitleScreen : MonoBehaviour {
         {
             UIFadeOut[i].gameObject.SetActive(false);
         }
+    }
+
+    IEnumerator Fadeout()
+    {
+        while (ScreenHider.alpha > 0)
+        {
+            yield return null;
+            ScreenHider.alpha -= FadeOutSpeed * Time.deltaTime;
+        }
+
+        ScreenHider.blocksRaycasts = false;
     }
 
     public void Quit()
