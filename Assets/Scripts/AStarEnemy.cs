@@ -63,9 +63,7 @@ public class AStarEnemy : MonoBehaviour
             Vector3 velocity = (target.GetComponent<Rigidbody>().velocity.normalized + Vector3.up) * flySpeed;
             Vector3 torque = new Vector3(Random.Range(-100, 100), Random.Range(-100, 100), Random.Range(-100, 100)).normalized * flySpeed;
             myRigidbody.velocity = velocity;
-            myRigidbody.AddRelativeTorque(torque, ForceMode.Impulse);
-
-            
+            myRigidbody.AddRelativeTorque(torque, ForceMode.Impulse);    
         }
         else
         {
