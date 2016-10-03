@@ -175,6 +175,8 @@ public class CharacterManager : MonoBehaviour {
         feverAmount = 0;
         StopAllCoroutines();
 
+        feverText.SetActive(true);
+
         feverRingFX.Play();
         feverRingFX.transform.localScale = playerTransform.localScale * 2;
 

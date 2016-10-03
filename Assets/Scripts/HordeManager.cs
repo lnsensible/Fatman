@@ -36,6 +36,10 @@ public class HordeManager : MonoBehaviour {
     public float boostTime = 0.2f;
     bool triggerBoost = false;
 
+    public float minHitFly;
+    public float maxHitFly;
+    float flycounter;
+
     public bool isSlow()
     {
         return isSlowmo;
@@ -66,6 +70,16 @@ public class HordeManager : MonoBehaviour {
     public void RemoveEnemy(Transform t){
         enemies.Remove(t);
     }
+
+    public bool Fly (){
+        flycounter -= 1;
+        if (flycounter < 1)
+        {
+            flycounter = Random.Range(minHitFly, maxHitFly);
+            return true;
+        }
+        return false;
+}
 
 	// Use this for initialization
 	void Start () {

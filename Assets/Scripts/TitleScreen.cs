@@ -80,10 +80,12 @@ public class TitleScreen : MonoBehaviour {
 
     public void StartGame()
     {
-        maincam.GetComponent<SmoothFollow>().enabled = true;
-        StartCoroutine("FadeUI");
-        instructioncountdown.start();
-
+        if (!maincam.GetComponent<SmoothFollow>().enabled)
+        {
+            maincam.GetComponent<SmoothFollow>().enabled = true;
+            StartCoroutine("FadeUI");
+            instructioncountdown.start();
+        }
     }
 
     IEnumerator FadeUI()

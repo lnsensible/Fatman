@@ -58,10 +58,21 @@ public class AStarEnemy : MonoBehaviour
         Destroy(GetComponent<NavMeshAgent>());
         Destroy(GetComponent<ChracterRestrict>());
 
-        Vector3 velocity = (target.GetComponent<Rigidbody>().velocity.normalized + Vector3.up) * flySpeed;
-        Vector3 torque = new Vector3(Random.Range(-100, 100), Random.Range(-100, 100), Random.Range(-100, 100)).normalized * flySpeed;
-        myRigidbody.velocity = velocity;
-        myRigidbody.AddRelativeTorque(torque, ForceMode.Impulse);
+        if (!HordeManager.Instance.Fly())
+        {
+            Vector3 velocity = (target.GetComponent<Rigidbody>().velocity.normalized + Vector3.up) * flySpeed;
+            Vector3 torque = new Vector3(Random.Range(-100, 100), Random.Range(-100, 100), Random.Range(-100, 100)).normalized * flySpeed;
+            myRigidbody.velocity = velocity;
+            myRigidbody.AddRelativeTorque(torque, ForceMode.Impulse);
+
+            
+        }
+        else
+        {
+            Vector3 direction = (Camera.main.transform.position - transform.position).normalized;
+            Vector3 velocity = direction * flySpeed;
+            myRigidbody.velocity = velocity;
+        }
 
         StartCoroutine("Die");
     }
