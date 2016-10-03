@@ -165,6 +165,7 @@ public class CharacterManager : MonoBehaviour {
         Time.timeScale = 0;
         fever2D.gameObject.SetActive(true);
         fever2D.Play(fever2dname);
+        GameOverManager.Instance.Stop();
     }
 
     public void StartFever(bool roll = false)
