@@ -11,6 +11,12 @@ public class EnemySpawner : MonoBehaviour
     private float spawnDelay = 0.0f;
     private float spawnInterval = 1.0f;
     private PlayerScript player;
+    private int oldFatLevel = 0;
+    private int numEnemiesShouldAppear;
+    [SerializeField]
+    private int coefficient;
+    [SerializeField]
+    private int constant;
 
     TitleScreen titlemanager;
 
@@ -30,16 +36,30 @@ public class EnemySpawner : MonoBehaviour
 
     private void Spawn()
     {
-        if (player.fatLevel < levelTable.Length && titlemanager.GameStarted)
+        if (titlemanager.GameStarted == false) return;
+        int currentFatLevel = player.fatLevel;
+        if (currentFatLevel != oldFatLevel)
         {
-            int spawnLimitInThisLevel = levelTable[player.fatLevel - 1];
-            int spawnedEnemiesCountInThisLevel = spawnedEnemiesCountInLevel[player.fatLevel - 1];
-            if (spawnedEnemiesCountInThisLevel < spawnLimitInThisLevel)
-            {
-                Instantiate(enemyPrefab, transform.position, transform.rotation);
-                ++spawnedEnemiesCountInLevel[player.fatLevel - 1];
-            }
+            numEnemiesShouldAppear += (currentFatLevel * coefficient) + constant;
+            oldFatLevel = currentFatLevel;
         }
+
+        if (numEnemiesShouldAppear > 0)
+        {
+            Instantiate(enemyPrefab, transform.position, transform.rotation);
+            --numEnemiesShouldAppear;
+        }
+
+        //if (player.fatLevel < levelTable.Length && titlemanager.GameStarted)
+        //{
+        //    int spawnLimitInThisLevel = levelTable[player.fatLevel - 1];
+        //    int spawnedEnemiesCountInThisLevel = spawnedEnemiesCountInLevel[player.fatLevel - 1];
+        //    if (spawnedEnemiesCountInThisLevel < spawnLimitInThisLevel)
+        //    {
+        //        Instantiate(enemyPrefab, transform.position, transform.rotation);
+        //        ++spawnedEnemiesCountInLevel[player.fatLevel - 1];
+        //    }
+        //}
     }
 
 }
