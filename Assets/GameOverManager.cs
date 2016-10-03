@@ -42,9 +42,12 @@ public class GameOverManager : MonoBehaviour {
 
     public void Stop()
     {
-        StopAllCoroutines();
-        isOver = false;
-        transitionCG.alpha = 0;
+        if (isOver)
+        {
+            StopAllCoroutines();
+            isOver = false;
+            transitionCG.alpha = 0;
+        }
     }
 
     public void GameOver()

@@ -34,12 +34,14 @@ public class TitleScreen : MonoBehaviour {
 
         ScreenHider.alpha = 1;
         ScreenHider.blocksRaycasts = true;
-    maincam = Camera.main;
-    player = GameObject.FindGameObjectWithTag("Player").transform;
-    maincam.transform.LookAt(player.transform);
+        maincam = Camera.main;
+        player = GameObject.FindGameObjectWithTag("Player").transform;
+        maincam.transform.LookAt(player.transform);
         Highscore.text += PlayerPrefs.GetInt("HIGHSCORE", 0);
 
         StartCoroutine("Fadeout");
+
+        MusicManager.Instance.PlayBGM(MusicManager.soundlist_bgm);
     }
 
     void Update()
@@ -82,6 +84,8 @@ public class TitleScreen : MonoBehaviour {
     {
         if (!maincam.GetComponent<SmoothFollow>().enabled)
         {
+            MusicManager.Instance.PlayBGM(MusicManager.soundlist_bgm_game);
+            MusicManager.Instance.PlaySound(MusicManager.soundlist_bgm_select);
             maincam.GetComponent<SmoothFollow>().enabled = true;
             StartCoroutine("FadeUI");
             instructioncountdown.start();
@@ -123,6 +127,7 @@ public class TitleScreen : MonoBehaviour {
 
     public void Quit()
     {
+        MusicManager.Instance.PlaySound(MusicManager.soundlist_bgm_quit);
         Application.Quit();
 
     }

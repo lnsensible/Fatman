@@ -162,6 +162,7 @@ public class CharacterManager : MonoBehaviour {
 
     public void FEVER()
     {
+        MusicManager.Instance.PlaySound(MusicManager.soundlist_fever);
         Time.timeScale = 0;
         fever2D.gameObject.SetActive(true);
         fever2D.Play(fever2dname);

@@ -13,7 +13,7 @@ public class PlayerScript : MonoBehaviour {
     //!太るまでの上限
     private int hungerUpperLimit = 1;
     //!デブレベル
-    public int fatLevel = 1;
+    public int fatLevel = 0;
 
     public float GrowSpeed = 0.5f;
     public float GrowTimer = 1.0f;
@@ -76,6 +76,8 @@ public class PlayerScript : MonoBehaviour {
         {
             if (CharacterManager.Instance.isFever())
             {
+                MusicManager.Instance.PlaySound(MusicManager.soundlist_enemyfly);
+                MusicManager.Instance.PlaySound(MusicManager.soundlist_hitenemy);
                 if (ScoreManager.Instance)
                 {
                     ScoreManager.Instance.hitNurse();
@@ -86,6 +88,7 @@ public class PlayerScript : MonoBehaviour {
             }
             else
             {
+                MusicManager.Instance.PlaySound(MusicManager.soundlist_hitbynurse);
                 col.transform.GetComponent<AStarEnemy>().Attack();
                 CharacterManager.Instance.GameOverAnimation();
                 GameOverManager.Instance.GameOver();
@@ -98,6 +101,7 @@ public class PlayerScript : MonoBehaviour {
         }
         else if (col.transform.tag == "Obstacle")
         {
+            MusicManager.Instance.PlaySound(MusicManager.soundlist_wallhit);
             StartCoroutine("ShakeCamera"); 
         }
     }

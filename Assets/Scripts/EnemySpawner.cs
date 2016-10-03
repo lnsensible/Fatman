@@ -5,8 +5,6 @@ public class EnemySpawner : MonoBehaviour
 {
     [SerializeField]
     private GameObject enemyPrefab;
-    [SerializeField]
-    private int[] levelTable;
     private int[] spawnedEnemiesCountInLevel = new int[10];
     private float spawnDelay = 0.0f;
     private float spawnInterval = 1.0f;
@@ -14,9 +12,11 @@ public class EnemySpawner : MonoBehaviour
     private int oldFatLevel = 0;
     private int numEnemiesShouldAppear;
     [SerializeField]
-    private int coefficient;
+    private float coefficient;
     [SerializeField]
-    private int constant;
+    private float constant;
+
+    public float timeSpawnInterval;
 
     TitleScreen titlemanager;
 
@@ -26,6 +26,7 @@ public class EnemySpawner : MonoBehaviour
         titlemanager = FindObjectOfType<TitleScreen>();
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerScript>();
         InvokeRepeating("Spawn", spawnDelay, spawnInterval);
+        InvokeRepeating("SpAWNiNTERVAL", 0.0f, timeSpawnInterval);
     }
 
     // Update is called once per frame
@@ -34,18 +35,25 @@ public class EnemySpawner : MonoBehaviour
 
     }
 
+     void SpAWNiNTERVAL()
+    {
+        MusicManager.Instance.PlaySound(MusicManager.soundlist_enemyspawn);
+        Instantiate(enemyPrefab, transform.position, transform.rotation);
+    }
+
     private void Spawn()
     {
         if (titlemanager.GameStarted == false) return;
         int currentFatLevel = player.fatLevel;
         if (currentFatLevel != oldFatLevel)
         {
-            numEnemiesShouldAppear += (currentFatLevel * coefficient) + constant;
+            numEnemiesShouldAppear += (int)((currentFatLevel * coefficient) + constant);
             oldFatLevel = currentFatLevel;
         }
 
         if (numEnemiesShouldAppear > 0)
         {
+            MusicManager.Instance.PlaySound(MusicManager.soundlist_enemyspawn);
             Instantiate(enemyPrefab, transform.position, transform.rotation);
             --numEnemiesShouldAppear;
         }

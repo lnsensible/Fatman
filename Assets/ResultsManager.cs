@@ -43,6 +43,8 @@ public class ResultsManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        MusicManager.Instance.PlayBGM(MusicManager.soundlist_bgm_gameover);
+
         Time.timeScale = 1;
         screenHider.alpha = 1;
         screenHider.blocksRaycasts = true;
@@ -87,6 +89,7 @@ public class ResultsManager : MonoBehaviour {
 
     public void Menu()
     {
+        MusicManager.Instance.PlaySound(MusicManager.soundlist_bgm_select);
         StartCoroutine("Fadein");
     }
 
@@ -100,6 +103,7 @@ public class ResultsManager : MonoBehaviour {
         while (currentscore != scoretoachieve)
         {
             yield return null;
+            MusicManager.Instance.PlaySound(MusicManager.soundlist_resultscore);
             ++currenteaten;
             currentscore += foodWorth;
             currentScore += foodWorth;
@@ -128,7 +132,7 @@ public class ResultsManager : MonoBehaviour {
         while (currentscore != scoretoachieve)
         {
             yield return null;
-
+            MusicManager.Instance.PlaySound(MusicManager.soundlist_resultscore);
             float randSize = Random.Range(minScaleSize, maxScaleSize);
             
             if (currentnurse != nurseHit)
@@ -170,6 +174,7 @@ public class ResultsManager : MonoBehaviour {
         while (currenttime < ElapsedTime)
         {
             yield return null;
+            MusicManager.Instance.PlaySound(MusicManager.soundlist_resultscore);
             ++currenttime;
             SetText(timeText, currenttime);
 
@@ -188,6 +193,7 @@ public class ResultsManager : MonoBehaviour {
         scoreTextHolder.localScale = Vector3.one;
         if (currentScore > PlayerPrefs.GetInt("HIGHSCORE", -1))
         {
+            MusicManager.Instance.PlaySound(MusicManager.soundlist_highscore);
             PlayerPrefs.SetInt("HIGHSCORE", currentScore);
             newrecord.SetActive(true);
         }
